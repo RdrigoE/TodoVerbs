@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Enums\TodoStatus;
+use App\Events\TodoCompleted;
 use App\Models\Todo;
 use Illuminate\Console\Command;
 
@@ -27,12 +28,8 @@ class CompleteTodo extends Command
      */
     public function handle()
     {
-        $id = $this->argument('id');
-
-        $todo = Todo::find($id);
-
-        $todo->status = TodoStatus::COMPLETED;
-        $todo->update();
+        $id   = $this->argument('id');
+        $todo = TodoCompleted::commit(user_id: 1, todo_id: (int) $id);
 
         $this->info("Todo $todo->id is completed");
     }
